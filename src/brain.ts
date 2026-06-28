@@ -126,7 +126,8 @@ async function usdSpentToday(env: Env): Promise<number> {
   return typeof row?.usd === "number" ? row.usd : 0;
 }
 
-/** Add this call's USD to today's counter (upsert; never touches the action count). */
+/** Add this call's USD to today's counter (upsert; never touches the action count).
+ *  After recording, warn the founder if we just crossed the daily cap. */
 async function recordUsd(env: Env, usd: number): Promise<void> {
   await env.DB.prepare(
     "INSERT INTO budget_counters (day, actions, usd) VALUES (?, 0, ?) " +
@@ -134,6 +135,40 @@ async function recordUsd(env: Env, usd: number): Promise<void> {
   )
     .bind(utcDay(), usd)
     .run();
+  await maybeWarnBudget(env);
+}
+
+/**
+ * Warn the founder ONCE per UTC day when the daily AI budget is hit. Idempotent
+ * via a settings `budget_warned` row holding the already-warned day, so repeated
+ * heartbeats/turns after the cap don't spam. Fail-soft: never throws.
+ */
+async function maybeWarnBudget(env: Env): Promise<void> {
+  try {
+    const cap = Number(env.DAILY_USD_BUDGET);
+    if (!(Number.isFinite(cap) && cap > 0)) return;
+    const spent = await usdSpentToday(env);
+    if (spent < cap) return;
+    const day = utcDay();
+    const row = await env.DB.prepare("SELECT value FROM settings WHERE key = 'budget_warned'").first<{ value: string }>();
+    if (row?.value === day) return;
+    // Mark BEFORE sending so a concurrent heartbeat can't double-warn.
+    await env.DB.prepare(
+      "INSERT INTO settings (key, value) VALUES ('budget_warned', ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value",
+    )
+      .bind(day)
+      .run();
+    if (!env.SLACK_FOUNDER_USER_ID || !env.SLACK_BOT_TOKEN) return;
+    const { slackDmUser } = await import("./slack");
+    await slackDmUser(
+      env.SLACK_BOT_TOKEN,
+      env.SLACK_FOUNDER_USER_ID,
+      `:warning: *Ishtar-Intern hit its daily AI budget* — $${spent.toFixed(2)} of $${cap} on ${day} (UTC).\n` +
+        `It's paused inference until the 00:00 UTC reset. Bump DAILY_USD_BUDGET and redeploy to keep going today.`,
+    );
+  } catch {
+    /* warning is best-effort */
+  }
 }
 
 /* ------------------------------------------------------------------ */

@@ -31,9 +31,9 @@ migrations_dir = "src/db/migrations"
 
 [vars]
 MOLTBOOK_AGENT_NAME = "IshtarIntern"
-# CHAT_MODEL — general instruct model (copied from datebook's Talk-to-Ishtar chat model),
-# good for open-ended social drafting; NOT a reasoning/gambit model.
-CHAT_MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+# CHAT_MODEL — gpt-oss-120b (OpenAI open-weight, CF-hosted, no key). Founder directive
+# 2026-06-28: ChatGPT open models, no kimi/glm. FAST (~0.5s, reasoning_effort:low).
+CHAT_MODEL = "@cf/openai/gpt-oss-120b"
 # All env.AI.run routed through this AI Gateway id (dollar spend cap set in the dashboard).
 AI_GATEWAY_ID = "datebook"
 # Hard daily cap on the number of write actions the loop may take, across all heartbeats.

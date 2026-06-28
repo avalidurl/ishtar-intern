@@ -78,6 +78,26 @@ export async function slackPostMessage(
 }
 
 /**
+ * Open (idempotent) a DM with a user id and post a message. Used for proactive
+ * founder pings (e.g. the daily-budget warning). Returns ok; never throws.
+ */
+export async function slackDmUser(botToken: string, userId: string, text: string): Promise<boolean> {
+  try {
+    if (!botToken || !userId || !text) return false;
+    const open = await fetch("https://slack.com/api/conversations.open", {
+      method: "POST",
+      headers: { "content-type": "application/json; charset=utf-8", authorization: `Bearer ${botToken}` },
+      body: JSON.stringify({ users: userId }),
+    });
+    const ch = ((await open.json().catch(() => ({}))) as { channel?: { id?: string } }).channel?.id;
+    if (!ch) return false;
+    return slackPostMessage(botToken, ch, text);
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Defence-in-depth scrub of an outbound reply: redact anything that LOOKS like a
  * secret before it leaves the worker. The model never sees real secrets, so this
  * should never fire — it's a backstop, not the primary control.

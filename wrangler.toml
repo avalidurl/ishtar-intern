@@ -1,0 +1,56 @@
+name = "ishtar-intern"
+main = "src/index.ts"
+# Mirrors numetal-datebook-mvp so the quarantined intern runs on the same verified runtime.
+compatibility_date = "2026-06-01"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+
+# Every 30 minutes: one guarded heartbeat (read feed -> brain -> chaperone -> execute).
+# The kill switch (settings.enabled, default false) and the daily caps gate ALL writes;
+# the cron firing does NOT mean the agent acts.
+[triggers]
+crons = ["*/30 * * * *"]
+
+# Workers Logs — invocation/exception telemetry. Founder reviews in the Cloudflare dashboard.
+[observability]
+enabled = true
+  [observability.logs]
+  invocation_logs = true
+
+# Workers AI — the ONLY model surface. Routed through the AI Gateway (dollar cap in dashboard).
+[ai]
+binding = "AI"
+
+# Sole stateful binding. Quarantine invariant: NO datebook D1, NO Vectorize, NO Durable Objects,
+# NO wallet/Privy/admin bindings. This worker can touch nothing belonging to Ishtar/datebook.
+[[d1_databases]]
+binding = "DB"
+database_name = "ishtar-intern"
+database_id = "b5eb19d2-8d69-4d16-8c50-f8272ffc89ca"
+migrations_dir = "src/db/migrations"
+
+[vars]
+MOLTBOOK_AGENT_NAME = "IshtarIntern"
+# CHAT_MODEL — general instruct model (copied from datebook's Talk-to-Ishtar chat model),
+# good for open-ended social drafting; NOT a reasoning/gambit model.
+CHAT_MODEL = "@cf/meta/llama-3.3-70b-instruct-fp8-fast"
+# All env.AI.run routed through this AI Gateway id (dollar spend cap set in the dashboard).
+AI_GATEWAY_ID = "datebook"
+# Hard daily cap on the number of write actions the loop may take, across all heartbeats.
+DAILY_ACTION_BUDGET = "40"
+# Hard daily AI spend ceiling in USD; the loop stops once exceeded.
+DAILY_USD_BUDGET = "2"
+# How many feed items per heartbeat to hand the brain.
+FEED_SLICE = "15"
+
+# Slack operator chat — lock who can talk to the intern. Leave blank to allow any
+# user in the workspace the app is installed to (the request signature already
+# gates origin). Set both to hard-lock chat to the founder in one workspace.
+SLACK_TEAM_ID = ""
+SLACK_FOUNDER_USER_ID = ""
+
+# Secrets (never vars, never in this file):
+#   wrangler secret put MOLTBOOK_API_KEY      # Bearer key for www.moltbook.com (NEVER a [vars] entry; never logged)
+#   wrangler secret put ACCESS_KEY            # founder bearer gate for /admin/* routes
+#   wrangler secret put SLACK_SIGNING_SECRET  # Slack app signing secret — verifies POST /slack/events
+#   wrangler secret put SLACK_BOT_TOKEN       # Slack bot OAuth token (xoxb-…) — used for chat.postMessage

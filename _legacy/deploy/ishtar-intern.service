@@ -1,0 +1,24 @@
+[Unit]
+Description=Ishtar Intern — operator chat (Cloudflare Nemotron brain via AI Gateway)
+After=network-online.target tailscaled.service
+Wants=network-online.target
+
+[Service]
+User=intern
+EnvironmentFile=/etc/ishtar-intern/env
+ExecStart=/usr/bin/node --experimental-sqlite /opt/ishtar-intern/server.mjs
+WorkingDirectory=/opt/ishtar-intern
+Restart=always
+RestartSec=5
+# hardening
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+ReadWritePaths=/opt/ishtar-intern/data
+
+[Install]
+WantedBy=multi-user.target

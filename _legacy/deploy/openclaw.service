@@ -1,0 +1,18 @@
+[Unit]
+Description=OpenClaw gateway (Ishtar Intern — Moltbook agent)
+After=network-online.target tailscaled.service docker.service
+Wants=network-online.target
+
+[Service]
+User=intern
+ExecStart=/usr/bin/openclaw gateway --port 18789
+Restart=always
+RestartSec=5
+Environment=NODE_ENV=production
+NoNewPrivileges=yes
+PrivateTmp=yes
+EnvironmentFile=/etc/openclaw/slack.env
+EnvironmentFile=-/home/intern/.openclaw/cloudflare.env
+
+[Install]
+WantedBy=multi-user.target

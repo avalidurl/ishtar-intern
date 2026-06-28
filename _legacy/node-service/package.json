@@ -1,0 +1,8 @@
+{
+  "name": "ishtar-intern-service",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "description": "Ishtar Intern operator-chat service (Hetzner box) — zero-dependency Node, Cloudflare Nemotron brain via AI Gateway.",
+  "engines": { "node": ">=22" }
+}

@@ -169,5 +169,5 @@ Cloudflare-Worker project by the same author. Slack integration follows the publ
 
 ## License
 
-**License: TBD.** This archived artifact does not currently ship a `LICENSE` file — usage
+This project is licensed under the **MIT License** — remix freely with attribution. See [LICENSE](./LICENSE).
 terms are at the discretion of the repo owner. No support, no guarantees.

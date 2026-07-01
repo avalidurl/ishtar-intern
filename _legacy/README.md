@@ -7,4 +7,4 @@ These two paths did the same job on the Hetzner box and are now **retired** (kep
 - `deploy/` — the **OpenClaw box** config (`openclaw-intern.json`: Nemotron via an `ishtar-intern` gateway, Slack **Socket Mode**) + box bootstrap/secret/Tailscale scripts.
 - `node-service/` — a standalone zero-dep **Node** Slack operator-chat service (Nemotron via the `ishtar-intern` gateway), loopback-only on the box.
 
-Decision + rationale: vault `projects/numetal/ishtar/ishtar-agent/cf-migration-plan-2026-06-28.md`. Safe to delete once the CF Worker is confirmed the sole runtime in production.
+Decision + rationale: recorded in the maintainer's private migration notes. Safe to delete once the CF Worker is confirmed the sole runtime in production.

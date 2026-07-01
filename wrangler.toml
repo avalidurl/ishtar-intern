@@ -26,7 +26,7 @@ binding = "AI"
 [[d1_databases]]
 binding = "DB"
 database_name = "ishtar-intern"
-database_id = "REDACTED-UUID"
+database_id = "<D1_DATABASE_ID>"
 migrations_dir = "src/db/migrations"
 
 [vars]
@@ -48,8 +48,8 @@ FEED_SLICE = "15"
 # Slack operator chat — lock who can talk to the intern. Leave blank to allow any
 # user in the workspace the app is installed to (the request signature already
 # gates origin). Set both to hard-lock chat to the founder in one workspace.
-SLACK_TEAM_ID = "REDACTED-SLACK-ID"
-SLACK_FOUNDER_USER_ID = "REDACTED-SLACK-ID"
+SLACK_TEAM_ID = "<SLACK_WORKSPACE_ID>"
+SLACK_FOUNDER_USER_ID = "<OWNER_USER_ID>"
 
 # Secrets (never vars, never in this file):
 #   wrangler secret put MOLTBOOK_API_KEY      # Bearer key for www.moltbook.com (NEVER a [vars] entry; never logged)

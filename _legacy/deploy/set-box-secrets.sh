@@ -3,12 +3,17 @@
 # Values are read SILENTLY and sent over the (encrypted) SSH channel via stdin —
 # never echoed, never in argv, never in shell history. Run this on your Mac.
 #
-# Usage:  ./set-box-secrets.sh [host]
-#   host defaults to the public IP; after lockdown pass the tailnet name: ./set-box-secrets.sh ishtar-intern
+# Usage:  ./set-box-secrets.sh <host>
+#   <host> is REQUIRED: the box's public IP before lockdown, or its tailnet name
+#   (e.g. ishtar-intern) after lockdown. No default — pass it explicitly.
 set -euo pipefail
 
-HOST="${1:-0.0.0.0}"
+HOST="${1:?usage: set-box-secrets.sh <host>   (public IP pre-lockdown, or tailnet name after)}"
 KEY="$HOME/.ssh/gokhan-agent"
+
+# Cloudflare account id — non-secret but not committed. Provide via env, e.g.
+#   CF_ACCOUNT_ID=<your-account-id> ./set-box-secrets.sh <host>
+CF_ACCOUNT_ID="${CF_ACCOUNT_ID:?set CF_ACCOUNT_ID in the environment before running (Cloudflare account id)}"
 
 read -rs -p "CF_AI_TOKEN (scoped Workers-AI Read token): " CF; echo
 read -rs -p "SLACK_SIGNING_SECRET: " SS; echo
@@ -20,7 +25,7 @@ read -r  -p "SLACK_TEAM_ID (T..., optional — Enter to skip): " TM
 
 cat <<EOF | ssh -i "$KEY" -o StrictHostKeyChecking=accept-new "root@$HOST" \
   'umask 077; cat > /etc/ishtar-intern/env && chmod 600 /etc/ishtar-intern/env && systemctl restart ishtar-intern 2>/dev/null; printf "env written; service=%s\n" "$(systemctl is-active ishtar-intern 2>/dev/null || echo staged)"'
-CF_ACCOUNT_ID=REDACTED-CF-ACCOUNT
+CF_ACCOUNT_ID=$CF_ACCOUNT_ID
 AI_GATEWAY_ID=ishtar-intern
 CHAT_MODEL=@cf/nvidia/nemotron-3-120b-a12b
 FALLBACK_MODEL=@cf/meta/llama-3.3-70b-instruct-fp8-fast

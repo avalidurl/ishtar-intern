@@ -42,12 +42,12 @@
     }
   },
   "bindings": [{ "match": { "channel": "slack" }, "agentId": "ishtar-intern" }],
-  "commands": { "ownerAllowFrom": ["slack:REDACTED-SLACK-ID"] },
+  "commands": { "ownerAllowFrom": ["slack:<OWNER_USER_ID>"] },
   "models": {
     "mode": "merge",
     "providers": {
       "cloudflare": {
-        "baseUrl": "https://gateway.ai.cloudflare.com/v1/REDACTED-CF-ACCOUNT/ishtar-intern/compat",
+        "baseUrl": "https://gateway.ai.cloudflare.com/v1/<CLOUDFLARE_ACCOUNT_ID>/ishtar-intern/compat",
         "apiKey": { "source": "env", "provider": "default", "id": "CF_AI_TOKEN_ISHTAR" },
         "api": "openai-completions",
         "models": [

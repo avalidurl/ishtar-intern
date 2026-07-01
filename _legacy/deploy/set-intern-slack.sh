@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 # Push the intern's Slack (Socket Mode) tokens to /etc/openclaw/slack.env and restart OpenClaw.
 # Tokens are read SILENTLY and sent over the encrypted SSH channel — never echoed, never in history.
-# The box is tailnet-only after lockdown, so this targets its tailnet IP.
+# The box is tailnet-only after lockdown, so this targets its tailnet address.
 set -euo pipefail
 
-HOST="${1:-100.99.112.49}"      # intern tailnet IP
+# <host> is REQUIRED — the intern's tailnet name or 100.x tailnet IP. No default.
+HOST="${1:?usage: set-intern-slack.sh <host>   (intern tailnet name or 100.x tailnet IP)}"
 KEY="$HOME/.ssh/gokhan-agent"
 
 read -rs -p "SLACK_APP_TOKEN (xapp-...): " AT; echo

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Ishtar Intern VPS bootstrap — Hetzner + Tailscale, hardened, tailnet-only.
-# Mirrors the lockdown in vault projects/intel/infra-hetzner-openclaw.md, but with a LEAN
+# Ishtar Intern VPS bootstrap — hardened, tailnet-only.
+# Mirrors the lockdown documented in the maintainer's private infra notes, but with a LEAN
 # setup: Node + Tailscale + Squid egress-allowlist only — NO Docker, NO OpenClaw (the intern
 # runs a small Node service, not an OpenClaw gateway).
 #

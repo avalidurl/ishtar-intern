@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       hono:
-        specifier: 4.12.25
-        version: 4.12.25
+        specifier: 4.13.16
+        version: 4.13.16
       zod:
         specifier: ^3.24.0
         version: 3.25.76
@@ -52,6 +52,7 @@ packages:
 
   '@cloudflare/vitest-pool-workers@0.6.16':
     resolution: {integrity: sha512-fKGP+jMyrIh54QncFa7A5NE3k8fWW6oCU4v9IW6Hiu7cAVKBvhdPUAfYBQS7EU1TsjGJl/y5N4Urds3PUFocoQ==}
+    deprecated: '@cloudflare/vitest-pool-workers has been renamed to @cloudflare/vitest-plugin. This package will not receive future updates.'
     peerDependencies:
       '@vitest/runner': 2.0.x - 2.1.x
       '@vitest/snapshot': 2.0.x - 2.1.x
@@ -1135,8 +1136,8 @@ packages:
   glob-to-regexp@0.4.1:
     resolution: {integrity: sha512-lkX1HJXwyMcprw/5YUZc2s7DrpAiHB21/V+E1rHUrVNokkvB6bqMzT0VfV6/86ZNabt1k14YOIaT7nDvOX3Iiw==}
 
-  hono@4.12.25:
-    resolution: {integrity: sha512-2NFaIyNVgJmBs/ecmtGzlmluTFs5cHEWGTdu0t1HBwYzoGXOL5nUQBRMXsXWla5i4KkG//QMzVP88m1+I3fdAQ==}
+  hono@4.13.16:
+    resolution: {integrity: sha512-AOLOEhvrV+iH92xXCnFr/5+3KjPKcI3xP63XJtX5spAnkznPdHijlIsUTpi7/9EhWqrTCekw5c5zh1K+YsVw7A==}
     engines: {node: '>=16.9.0'}
 
   is-arrayish@0.3.4:
@@ -2242,7 +2243,7 @@ snapshots:
 
   glob-to-regexp@0.4.1: {}
 
-  hono@4.12.25: {}
+  hono@4.13.16: {}
 
   is-arrayish@0.3.4:
     optional: true

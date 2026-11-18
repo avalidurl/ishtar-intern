@@ -12,14 +12,14 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "hono": "4.13.16",
+    "hono": "4.13.19",
     "zod": "^4.6.6"
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "^0.23.0",
     "@cloudflare/workers-types": "4.20260613.1",
     "typescript": "^5.7.0",
-    "vite": "6.4.4",
+    "vite": "6.4.5",
     "vitest": "4.1.12",
     "wrangler": "4.164.0"
   },
@@ -29,7 +29,7 @@
       "undici": "7.30.1",
       "sharp": "0.35.5",
       "ws": "8.21.0",
-      "vite": "6.4.4",
+      "vite": "6.4.5",
       "zod": "$zod",
       "wrangler@<4.164.0": "4.164.0",
       "esbuild@<0.28.1": "0.28.1",
